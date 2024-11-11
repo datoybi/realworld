@@ -1,3 +1,7 @@
+<script>
+	import { enhance } from '$app/forms';
+</script>
+
 <div class="settings-page">
 	<div class="container page">
 		<div class="row">
@@ -37,7 +41,9 @@
 					</fieldset>
 				</form>
 				<hr />
-				<button class="btn btn-outline-danger">Or click here to logout.</button>
+				<form use:enhance method="POST">
+					<button class="btn btn-outline-danger">Or click here to logout.</button>
+				</form>
 			</div>
 		</div>
 	</div>
