@@ -9,18 +9,17 @@ export async function load({ cookies }: { cookies: Cookies }) {
 }
 
 export const actions = {
-	default: async ({ request }: { request: Request }) => {
+	default: async ({ cookies, request }: { cookies: Cookies; request: Request }) => {
 		const data = await request.formData();
 
 		const user = {
 			user: {
-				username: data.get('username'),
 				email: data.get('email'),
 				password: data.get('password')
 			}
 		};
-
-		await fetch(`http://localhost:3000/api/users`, {
+		// TODO: 왜 response.json()으로 넘겨야만 데이터가 표출될까??
+		await fetch(`http://localhost:3000/api/users/login`, {
 			headers: {
 				'Content-Type': 'application/json'
 			},
@@ -31,22 +30,16 @@ export const actions = {
 				console.log('response', response);
 				return response.json();
 			})
-			.then((body) => {
-				// 이거 필요해?
-				console.log('body ', body);
+			.then(({ user }) => {
+				console.log('user ', user);
+				// const value = btoa(JSON.stringify(user));
+				cookies.set('jwt', JSON.stringify(user), { path: '/' });
 			})
 			.catch((error) => {
 				console.error(error);
 				return fail(error.errors);
 			});
 
-		// if (response.status === 422) {
-		// 	return fail(response.status, {
-		// 		error: response.statusText
-		// 	});
-		// }
-		// TODO: 나중에 alert 안되는 이유 알아보기 (아마도 html에서 해야할수도?)
-		// alert('회원가입이 되었습니다. 로그인 페이지로 이동합니다.');
-		redirect(307, '/login');
+		redirect(307, '/');
 	}
 };

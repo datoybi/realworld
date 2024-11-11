@@ -1,3 +1,9 @@
+<script>
+	import { enhance } from '$app/forms';
+	let { form } = $props();
+	console.log(form);
+</script>
+
 <div class="auth-page">
 	<div class="container page">
 		<div class="row">
@@ -7,11 +13,13 @@
 					<a href="/login">Have an account?</a>
 				</p>
 
-				<ul class="error-messages">
-					<li>That email is already taken</li>
-				</ul>
+				{#if form?.error}
+					<ul class="error-messages">
+						<li>That email is already taken</li>
+					</ul>
+				{/if}
 
-				<form method="POST">
+				<form use:enhance method="POST">
 					<fieldset class="form-group">
 						<input
 							class="form-control form-control-lg"
